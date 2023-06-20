@@ -1,0 +1,35 @@
+*,
+::after,
+::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.root {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.inputWrapper {
+	display: flex;
+	align-items: center;
+	font-size: 24px;
+	gap: 10px;
+}
+
+.input {
+	display: block;
+	width: 100%;
+
+	font-size: 24px;
+	padding: 5px;
+	border-radius: 5px;
+}
