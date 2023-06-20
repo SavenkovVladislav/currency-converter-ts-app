@@ -19,12 +19,12 @@ const initCurrentCurrencyState = {
 
 const App: FC = () => {
 	const [loading, setLoading] = useState<boolean>(true)
-	const [list, setList] = useState<CurrencyType[]>([])
-	const [value, setValue] = useState<Number>(0)
-	const [localValue, setLocalValue] = useState('')
+	const [list, setList] = useState<CurrencyType[]>([]) // данные с сервера
+	const [inputValue, setInputValue] = useState(0) // value инпута в который вводится сумма в валюте
+	const [localInputValue, setLocalInputValue] = useState('') // локальное value инпута в который вводится сумма в валюте
 	const [currentCurrency, setCurrentCurrency] = useState<CurrencyType>(
 		initCurrentCurrencyState
-	)
+	) // текущая валюта
 	const [error, setError] = useState<Error | null>(null)
 
 	useEffect(() => {
@@ -46,19 +46,22 @@ const App: FC = () => {
 				setLoading(false)
 			})
 
+		// получаем данные из localStorage по ключу 'currentCurrency'
 		const savedСurrentCurrency = localStorage.getItem('currentCurrency')
 		if (savedСurrentCurrency) {
 			setCurrentCurrency(JSON.parse(savedСurrentCurrency))
 		}
 	}, [])
 
+	// записываем данные в localStorage по ключу 'currentCurrency'
 	useEffect(() => {
 		localStorage.setItem('currentCurrency', JSON.stringify(currentCurrency))
 	}, [currentCurrency])
 
+	// функция обновления inputValue
 	const updateValue = useCallback(
 		debounce(value => {
-			setValue(value)
+			setInputValue(value)
 		}, 1000),
 		[]
 	)
@@ -68,7 +71,7 @@ const App: FC = () => {
 	}
 
 	const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-		setLocalValue(event.target.value)
+		setLocalInputValue(event.target.value)
 		updateValue(event.target.value)
 	}
 
@@ -87,7 +90,7 @@ const App: FC = () => {
 						className={styles.input}
 						type='text'
 						placeholder='Сумма в валюте'
-						value={localValue}
+						value={localInputValue}
 						onChange={onChangeInput}
 					/>
 					<CurrencyPicker
@@ -103,7 +106,7 @@ const App: FC = () => {
 							readOnly
 							value={
 								(currentCurrency.Value / currentCurrency.Nominal) *
-								Number(value)
+								Number(inputValue)
 							}
 						/>
 						<span>&#8381;</span>
